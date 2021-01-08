@@ -25,4 +25,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Route::put('/transaction/{id}', [TransactionController::class, 'update']);
 // Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']);
 
-Route::resource('transaction', TransactionController::class)->except(['create', 'edit']);
+Route::post('register', [UserController::class, 'register']);
+Route::post('login', [UserController::class, 'login']);
+
+Route::resource('transaction', TransactionController::class)
+    ->except(['create', 'edit'])
+    ->middleware('jwt.verify');
+Route::get('user', 'UserController@getAuthenticatedUser')->middleware('jwt.verify');
